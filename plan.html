@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    html, body { height: 100%; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+    #map { height: 100%; width: 100%; }
+    .panel {
+      position: absolute; top: 14px; left: 14px; z-index: 1000;
+      width: min(405px, calc(100vw - 28px));
+      max-height: calc(100vh - 28px); overflow: auto;
+      background: rgba(255,255,255,0.96); border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.20); padding: 16px 16px 14px;
+      backdrop-filter: blur(8px);
+    }
+    h1 { font-size: 18px; margin: 0 0 8px; }
+    h2 { font-size: 14px; margin: 16px 0 8px; }
+    p, li { font-size: 12.5px; line-height: 1.45; color: #333; }
+    .tag { display:inline-block; padding: 3px 8px; border-radius: 999px; font-size: 11px; margin: 2px 3px 2px 0; background:#f2f2f2; }
+    .btn {
+      display:inline-block; text-decoration:none; color:white; background:#111; padding:7px 10px;
+      border-radius:10px; margin:4px 4px 0 0; font-size:12px;
+    }
+    .btn.secondary { background:#555; }
+    .route-card {
+      border: 1px solid #e5e5e5; border-radius: 14px; padding: 10px; margin: 8px 0;
+      background: #fafafa;
+    }
+    .small { font-size: 11px; color:#666; }
+    .legend-row { display:flex; align-items:center; gap:8px; font-size:12px; margin:6px 0; }
+    .dot { width:11px; height:11px; border-radius:50%; display:inline-block; }
+    .popup-title { font-weight: 700; font-size: 14px; }
+    .popup-note { font-size: 12px; margin-top: 4px; }
+    .leaflet-popup-content { min-width: 220px; }
+    @media (max-width: 680px) {
+      .panel { top: auto; bottom: 12px; left: 12px; right: 12px; width: auto; max-height: 45vh; }
+    }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+
+<div class="panel">
+  <h1>Plan</h1>
+  <p class="small">Cannes + Antibes 一日打卡路线：戛纳电影节线、昂蒂布老城线、昂蒂布角海岸延伸线。</p>
+  <div>
+    <span class="tag">📍酒店起点</span>
+    <span class="tag">🎬戛纳电影节线</span>
+    <span class="tag">🏛昂蒂布老城线</span>
+    <span class="tag">🌊海岸徒步线</span>
+  </div>
+
+  <h2>推荐走法</h2>
+  <div class="route-card">
+    <b>上午/中午：Cannes 戛纳 2.5–3.5h</b>
+    <p>Gare de Cannes → 梦露墙 → 节庆宫 → 星光大道 → La Croisette → 老港 → Le Suquet 观景台。</p>
+  </div>
+  <div class="route-card">
+    <b>下午：Antibes 昂蒂布老城 2–3h</b>
+    <p>车站 → 普罗旺斯市集 → 老城小巷 → 海边城墙平台 → Plage de la Gravette → 白色雕塑 → 回车站。</p>
+  </div>
+  <div class="route-card">
+    <b>体力好再加：昂蒂布角海岸 1.5–3h</b>
+    <p>Point de l’Ilette → Garoupe 海滩 → Sentier du Littoral。下午3点后光线更适合看海和拍剪影。</p>
+  </div>
+
+  <h2>交通快捷按钮</h2>
+  <a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=43.65997222222222,7.182972222222222&destination=Gare+de+Cannes&travelmode=transit">酒店 → 戛纳站</a>
+  <a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Gare+de+Cannes&destination=Gare+d'Antibes&travelmode=transit">戛纳 → 昂蒂布</a>
+  <a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Gare+d'Antibes&destination=43.65997222222222,7.182972222222222&travelmode=transit">昂蒂布 → 酒店</a>
+  <a class="btn secondary" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.659972,7.182972">打开酒店位置</a>
+
+  <h2>图例</h2>
+  <div class="legend-row"><span class="dot" style="background:#111"></span>酒店/交通</div>
+  <div class="legend-row"><span class="dot" style="background:#d33"></span>拍照点</div>
+  <div class="legend-row"><span class="dot" style="background:#2b65d9"></span>海边/步道/港口</div>
+  <div class="legend-row"><span class="dot" style="background:#0a8f55"></span>景点/市集/老城</div>
+  <p class="small">提示：点击每个点可看说明，并直接打开 Google Maps 导航。</p>
+</div>
+
+<script>
+const points = [{"name": "Hotel / 你的酒店", "city": "Start", "lat": 43.65997222222222, "lng": 7.182972222222222, "type": "hotel", "note": "起点：43°39'35.9\"N 7°10'58.7\"E"}, {"name": "Gare de Cannes / 戛纳火车站", "city": "Cannes", "lat": 43.55472, "lng": 7.01972, "type": "transport", "note": "620公交/火车到达点；梦露墙在车站上方，走大阶梯上去。"}, {"name": "Fresque Marilyn Monroe / 梦露涂鸦墙", "city": "Cannes", "lat": 43.55525, "lng": 7.01965, "type": "photo", "note": "车站上方的大壁画，先拍这里最顺路。"}, {"name": "Palais des Festivals / 节庆宫电影宫", "city": "Cannes", "lat": 43.55051, "lng": 7.01702, "type": "landmark", "note": "戛纳电影节主会场；红毯台阶、明星打卡位。"}, {"name": "Allée des Étoiles / 星光大道手印", "city": "Cannes", "lat": 43.55037, "lng": 7.0173, "type": "photo", "note": "就在节庆宫正门外步道；低头找影人手印。"}, {"name": "La Croisette / 小十字大道", "city": "Cannes", "lat": 43.54892, "lng": 7.0227, "type": "walk", "note": "棕榈树、蓝色长椅、海岸线机位；适合慢走拍照。"}, {"name": "Vieux Port de Cannes / 戛纳老港", "city": "Cannes", "lat": 43.54885, "lng": 7.01355, "type": "harbour", "note": "游艇码头，奢华感强；从节庆宫旁边走过去很近。"}, {"name": "Le Suquet + Notre-Dame d’Espérance / 苏克老城观景台", "city": "Cannes", "lat": 43.55126, "lng": 7.01035, "type": "view", "note": "上坡到老城最高机位；俯瞰戛纳、老港、海湾。"}, {"name": "Gare d’Antibes / 昂蒂布火车站", "city": "Antibes", "lat": 43.5855, "lng": 7.11935, "type": "transport", "note": "昂蒂布主到达点；老城步行可达。"}, {"name": "Marché Provençal / 普罗旺斯市集", "city": "Antibes", "lat": 43.58145, "lng": 7.12808, "type": "market", "note": "老城核心；早市氛围最好，附近小街很好逛。"}, {"name": "Vieil Antibes / 昂蒂布老城街区", "city": "Antibes", "lat": 43.5811, "lng": 7.1269, "type": "landmark", "note": "不进毕加索博物馆的话，就把时间留给老城小巷、城墙海景和市集周边。"}, {"name": "Remparts d’Antibes / 海边城墙平台", "city": "Antibes", "lat": 43.58025, "lng": 7.12885, "type": "view", "note": "沿海边平台走，能看到海湾和尼斯方向；不用进博物馆也很出片。"}, {"name": "Plage de la Gravette / 老城旁海滩", "city": "Antibes", "lat": 43.5827, "lng": 7.1273, "type": "beach", "note": "靠近老城和港口的小海滩；适合坐一会儿看海。"}, {"name": "Le Nomade / 海边白色雕塑", "city": "Antibes", "lat": 43.58623, "lng": 7.12975, "type": "photo", "note": "Jaume Plensa 白色字母人像雕塑；从这里回车站约10–15分钟。"}, {"name": "Point de l’Ilette / 莫奈同款方向机位", "city": "Antibes", "lat": 43.5759, "lng": 7.1263, "type": "photo", "note": "下午3点后海面光线更好；可接海岸散步。"}, {"name": "Plage de la Garoupe / Garoupe海滩", "city": "Antibes", "lat": 43.56395, "lng": 7.1378, "type": "beach", "note": "Cap d’Antibes 海岸徒步常见节点；适合看海和休息。"}, {"name": "Sentier du Littoral / 昂蒂布角海岸步道", "city": "Antibes", "lat": 43.55195, "lng": 7.14055, "type": "walk", "note": "体力路线；石路多，建议穿好走的鞋。"}, {"name": "Juan-les-Pins / 朱安莱潘站", "city": "Antibes", "lat": 43.5709, "lng": 7.1115, "type": "transport", "note": "可作为体力不足时的回程站，也可从这里回尼斯方向。"}];
+const cannesRoute = [[43.55472, 7.01972], [43.55525, 7.01965], [43.55051, 7.01702], [43.55037, 7.0173], [43.54892, 7.0227], [43.54885, 7.01355], [43.55126, 7.01035]];
+const antibesOldRoute = [[43.5855, 7.11935], [43.58145, 7.12808], [43.5811, 7.1269], [43.58025, 7.12885], [43.5827, 7.1273], [43.58623, 7.12975], [43.5855, 7.11935]];
+const antibesCoastRoute = [[43.5855, 7.11935], [43.5759, 7.1263], [43.56395, 7.1378], [43.55195, 7.14055], [43.5709, 7.1115]];
+
+const map = L.map('map', { zoomControl: true }).setView([43.65997222222222, 7.182972222222222], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+function colorByType(t) {
+  if (t === 'hotel' || t === 'transport') return '#111111';
+  if (t === 'photo') return '#d33';
+  if (t === 'walk' || t === 'beach' || t === 'harbour') return '#2b65d9';
+  return '#0a8f55';
+}
+
+function googleLink(lat, lng) {
+  return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+}
+
+const groups = {
+  "全部点位": L.layerGroup(),
+  "Cannes 戛纳电影节线": L.layerGroup(),
+  "Antibes 老城线": L.layerGroup(),
+  "Antibes 海岸徒步线": L.layerGroup()
+};
+
+points.forEach((p) => {
+  const marker = L.circleMarker([p.lat, p.lng], {
+    radius: p.type === 'hotel' ? 9 : 7,
+    color: '#fff',
+    weight: 2,
+    fillColor: colorByType(p.type),
+    fillOpacity: 0.95
+  });
+  marker.bindPopup(`
+    <div class="popup-title">${p.name}</div>
+    <div class="popup-note">${p.note}</div>
+    <div style="margin-top:8px;">
+      <a target="_blank" href="${googleLink(p.lat,p.lng)}">在 Google Maps 打开</a>
+    </div>
+  `);
+  marker.addTo(groups["全部点位"]);
+  if (p.city === "Cannes") marker.addTo(groups["Cannes 戛纳电影节线"]);
+  if (p.city === "Antibes") marker.addTo(groups["Antibes 老城线"]);
+  if (["Point de l’Ilette / 莫奈同款方向机位","Plage de la Garoupe / Garoupe海滩","Sentier du Littoral / 昂蒂布角海岸步道","Juan-les-Pins / 朱安莱潘站"].includes(p.name)) marker.addTo(groups["Antibes 海岸徒步线"]);
+});
+
+const cannesLine = L.polyline(cannesRoute, {color:'#d33', weight:4, opacity:.75, dashArray:'8,8'}).bindPopup('Cannes 戛纳步行打卡线');
+const antibesOldLine = L.polyline(antibesOldRoute, {color:'#0a8f55', weight:4, opacity:.75}).bindPopup('Antibes 老城轻松环线');
+const antibesCoastLine = L.polyline(antibesCoastRoute, {color:'#2b65d9', weight:4, opacity:.75, dashArray:'10,8'}).bindPopup('Antibes 海岸徒步延伸线');
+
+const baseRoutes = L.layerGroup([cannesLine, antibesOldLine, antibesCoastLine]).addTo(map);
+groups["全部点位"].addTo(map);
+
+L.control.layers(null, {
+  "全部点位": groups["全部点位"],
+  "Cannes 戛纳点位": groups["Cannes 戛纳电影节线"],
+  "Antibes 老城点位": groups["Antibes 老城线"],
+  "Antibes 海岸点位": groups["Antibes 海岸徒步线"],
+  "路线线条": baseRoutes
+}, { collapsed: false }).addTo(map);
+
+const allLatLng = points.map(p => [p.lat, p.lng]);
+map.fitBounds(L.latLngBounds(allLatLng), {padding:[30,30]});
+
+</script>
+</body>
+</html>
