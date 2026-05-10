@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>day2</title>
+<style>
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+background:#f5f5f5;
+color:#111;
+}
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+h1{
+font-size:34px;
+margin-bottom:8px;
+}
+.subtitle{
+color:#666;
+margin-bottom:30px;
+}
+.city{
+background:white;
+border-radius:24px;
+padding:22px;
+margin-bottom:30px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+iframe{
+width:100%;
+height:520px;
+border:0;
+border-radius:20px;
+margin:16px 0 22px 0;
+}
+.routebtn{
+display:inline-block;
+background:#111;
+color:white;
+text-decoration:none;
+padding:12px 16px;
+border-radius:14px;
+font-weight:700;
+margin-top:10px;
+}
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:16px;
+}
+.card{
+background:#fafafa;
+border:1px solid #eee;
+border-radius:18px;
+padding:16px;
+}
+.badge{
+display:inline-block;
+background:#111;
+color:white;
+padding:4px 8px;
+border-radius:999px;
+font-size:11px;
+margin-bottom:10px;
+}
+.name{
+font-weight:700;
+margin-bottom:8px;
+}
+.note{
+font-size:13px;
+line-height:1.45;
+color:#666;
+margin-bottom:12px;
+}
+.actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+.actions a{
+text-decoration:none;
+padding:8px 10px;
+border-radius:10px;
+font-size:12px;
+font-weight:600;
+}
+.google{
+background:#e8f0fe;
+color:#1a73e8;
+}
+.apple{
+background:#f1f1f1;
+color:#222;
+}
+.topnav{
+position:sticky;
+top:0;
+z-index:50;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+background:rgba(245,245,245,.92);
+backdrop-filter:blur(10px);
+padding:10px 0 16px 0;
+margin-bottom:18px;
+}
+.topnav a{
+display:block;
+text-align:center;
+text-decoration:none;
+background:#111;
+color:white;
+font-weight:800;
+padding:14px 10px;
+border-radius:16px;
+box-shadow:0 8px 22px rgba(0,0,0,.12);
+}
+html{
+scroll-behavior:smooth;
+}
+.city{
+scroll-margin-top:86px;
+}
+@media(max-width:768px){
+iframe{height:380px;}
+.topnav{gap:8px;}
+.topnav a{font-size:14px;padding:12px 8px;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Day 2</h1>
+<div class="subtitle">Monaco → Menton → Nice · 每个打卡点都支持跳转 Google Maps / Apple Maps。</div>
+
+<div class="topnav">
+  <a href="#monaco-section">🇲🇨 Monaco 摩纳哥</a>
+  <a href="#menton-section">🇫🇷 Menton 芒通</a>
+</div>
+
+<div class="city" id="monaco-section">
+<h2>🇲🇨 Monaco</h2>
+<a class="routebtn" target="_blank" href="https://www.google.com/maps/dir/43.7381,7.421/43.7385,7.4215/43.7396,7.4275/43.7388,7.425/43.7325,7.4198/43.7308,7.4256/43.7303,7.4246/43.7301,7.4228/43.7313,7.4198">打开 Monaco 全路线</a>
+<iframe src="https://www.google.com/maps/dir/43.7381,7.421/43.7385,7.4215/43.7396,7.4275/43.7388,7.425/43.7325,7.4198/43.7308,7.4256/43.7303,7.4246/43.7301,7.4228/43.7313,7.4198/output=embed"></iframe>
+<div class="grid">
+
+    <div class="card">
+    <div class="badge">M1</div>
+    <div class="name">Gare de Monaco-Monte-Carlo</div>
+    <div class="note">火车站出站后右转游客中心</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7381,7.421">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7381,7.421&q=Gare%20de%20Monaco-Monte-Carlo">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">M2</div>
+    <div class="name">Monaco Tourist Information</div>
+    <div class="note">领取地图/手册，询问护照纪念章</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7385,7.4215">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7385,7.4215&q=Monaco%20Tourist%20Information">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">M3</div>
+    <div class="name">Casino de Monte-Carlo</div>
+    <div class="note">赌场、喷泉、豪车、红毯机位</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7396,7.4275">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7396,7.4275&q=Casino%20de%20Monte-Carlo">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">M4</div>
+    <div class="name">Circuit de Monaco</div>
+    <div class="note">F1赛道路段</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7388,7.425">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7388,7.425&q=Circuit%20de%20Monaco">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">M5</div>
+    <div class="name">Collection de Voitures Anciennes</div>
+    <div class="note">王子汽车博物馆</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7325,7.4198">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7325,7.4198&q=Collection%20de%20Voitures%20Anciennes">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">M6</div>
+    <div class="name">Musée Océanographique</div>
+    <div class="note">海洋博物馆+露台海景</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7308,7.4256">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7308,7.4256&q=Mus%C3%A9e%20Oc%C3%A9anographique">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">M7</div>
+    <div class="name">Jardin Saint-Martin</div>
+    <div class="note">海边花园观景步道</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7303,7.4246">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7303,7.4246&q=Jardin%20Saint-Martin">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">M8</div>
+    <div class="name">Cathédrale de Monaco</div>
+    <div class="note">白色教堂</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7301,7.4228">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7301,7.4228&q=Cath%C3%A9drale%20de%20Monaco">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">M9</div>
+    <div class="name">Palais Princier</div>
+    <div class="note">王宫观景台</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7313,7.4198">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7313,7.4198&q=Palais%20Princier">Apple Maps</a>
+    </div>
+    </div>
+    </div></div>
+<div class="city" id="menton-section">
+<h2>🇫🇷 Menton</h2>
+<a class="routebtn" target="_blank" href="https://www.google.com/maps/dir/43.7756,7.5044/43.775,7.5078/43.7765,7.5108/43.7761,7.5102/43.776,7.5104/43.7752,7.51/43.775,7.509/43.7747,7.5084/43.7745,7.5078/43.774,7.5068/43.7738,7.5062/43.7741,7.5015/43.7768,7.4938">打开 Menton 全路线</a>
+<iframe src="https://www.google.com/maps/dir/43.7756,7.5044/43.775,7.5078/43.7765,7.5108/43.7761,7.5102/43.776,7.5104/43.7752,7.51/43.775,7.509/43.7747,7.5084/43.7745,7.5078/43.774,7.5068/43.7738,7.5062/43.7741,7.5015/43.7768,7.4938/output=embed"></iframe>
+<div class="grid">
+
+    <div class="card">
+    <div class="badge">T1</div>
+    <div class="name">Menton Garavan</div>
+    <div class="note">芒通起点车站</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7756,7.5044">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7756,7.5044&q=Menton%20Garavan">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T2</div>
+    <div class="name">Plage des Sablettes</div>
+    <div class="note">海滩</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.775,7.5078">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.775,7.5078&q=Plage%20des%20Sablettes">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T3</div>
+    <div class="name">Menton Viewpoint</div>
+    <div class="note">彩色老城全景机位</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7765,7.5108">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7765,7.5108&q=Menton%20Viewpoint">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T4</div>
+    <div class="name">Escaliers Saint-Michel</div>
+    <div class="note">圣米歇尔石阶</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7761,7.5102">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7761,7.5102&q=Escaliers%20Saint-Michel">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T5</div>
+    <div class="name">Basilique Saint-Michel</div>
+    <div class="note">圣米歇尔教堂</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.776,7.5104">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.776,7.5104&q=Basilique%20Saint-Michel">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T6</div>
+    <div class="name">Old Town Alleys</div>
+    <div class="note">艺术家彩色小巷</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7752,7.51">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7752,7.51&q=Old%20Town%20Alleys">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T7</div>
+    <div class="name">Au Temps Passé</div>
+    <div class="note">冰箱贴采购</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.775,7.509">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.775,7.509&q=Au%20Temps%20Pass%C3%A9">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T8</div>
+    <div class="name">Tutti Frutti</div>
+    <div class="note">柠檬雪酪</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7747,7.5084">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7747,7.5084&q=Tutti%20Frutti">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T9</div>
+    <div class="name">La Tarte Mentonnaise</div>
+    <div class="note">柠檬蛋糕</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7745,7.5078">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7745,7.5078&q=La%20Tarte%20Mentonnaise">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T10</div>
+    <div class="name">Prestige de Menton</div>
+    <div class="note">本地香氛</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.774,7.5068">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.774,7.5068&q=Prestige%20de%20Menton">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T11</div>
+    <div class="name">Marius Fabre</div>
+    <div class="note">伴手礼</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7738,7.5062">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7738,7.5062&q=Marius%20Fabre">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T12</div>
+    <div class="name">Jardin Biovès</div>
+    <div class="note">比奥韦斯花园</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7741,7.5015">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7741,7.5015&q=Jardin%20Biov%C3%A8s">Apple Maps</a>
+    </div>
+    </div>
+    
+    <div class="card">
+    <div class="badge">T13</div>
+    <div class="name">Menton Station</div>
+    <div class="note">返回尼斯</div>
+    <div class="actions">
+      <a class="google" target="_blank" href="https://www.google.com/maps/search/?api=1&query=43.7768,7.4938">Google Maps</a>
+      <a class="apple" target="_blank" href="https://maps.apple.com/?ll=43.7768,7.4938&q=Menton%20Station">Apple Maps</a>
+    </div>
+    </div>
+    
+</div>
+</div>
+</div>
+</body>
+</html>
