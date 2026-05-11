@@ -59,7 +59,7 @@
 <body>
 <header>
   <h1>first｜Olten → First 山 → Bachalpsee → 梦幻山坡</h1>
-  <div class="sub">我已经把每一个打卡点都独立做成了按钮和卡片。你可以直接点按钮跳到地图上的对应位置，再点下面每个地点卡片里的 <b>Google Maps</b>、<b>Apple 地图</b> 或 <b>SBB 查询</b>。这个版本也按你说的放宽到了可以 <b>晚上 10 点左右回到酒店</b>，所以返程建议可以更晚一些。</div>
+  <div class="sub">我已经把每一个打卡点都独立做成了按钮和卡片。你可以直接点按钮跳到地图上的对应位置，再点下面每个地点卡片里的 <b>Google Maps</b>、<b>Apple 地图</b> 或 <b>SBB App</b>。这个版本也按你说的放宽到了可以 <b>晚上 10 点左右回到酒店</b>，所以返程建议可以更晚一些。</div>
 </header>
 
 <section class="summary">
@@ -140,7 +140,7 @@
       <li>点 <b>定位到地图</b>：把地图直接跳到这个点。</li>
       <li>点 <b>Google Maps</b>：打开 Google 地图。</li>
       <li>点 <b>Apple 地图</b>：打开 Apple 地图。</li>
-      <li>点 <b>SBB 查询</b>：跳转到 SBB timetable 查询你去这个点或从这个点出发的公共交通。</li>
+      <li>点 <b>SBB App</b>：跳转到 SBB timetable 查询你去这个点或从这个点出发的公共交通。</li>
     </ul>
   </div>
 
@@ -153,7 +153,7 @@ const tripDate = '2026-05-13';
 function googleSearchUrl(q){ return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`; }
 function googleDirUrl(origin, destination, mode='walking'){ return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&travelmode=${mode}`; }
 function appleUrl(label, lat, lng){ return `https://maps.apple.com/?ll=${lat},${lng}&q=${encodeURIComponent(label)}`; }
-function sbbUrl(from, to, time='08:00', moment='DEPARTURE'){ return `https://www.sbb.ch/en?von=${encodeURIComponent(from)}&nach=${encodeURIComponent(to)}&date=%22${tripDate}%22&time=%22${time}%22&moment=%22${moment}%22`; }
+function sbbUrl(from, to, time='08:00', moment='DEPARTURE'){ return `https://app.sbbmobile.ch/timetable?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`; }
 
 const stops = [
   {
@@ -271,7 +271,7 @@ stops.forEach((s) => {
     <b>提醒：</b>${s.note}<br><br>
     <a href="${s.google}" target="_blank">Google Maps</a> ｜
     <a href="${s.apple}" target="_blank">Apple 地图</a> ｜
-    <a href="${s.sbb}" target="_blank">SBB 查询</a>`;
+    <a href="${s.sbb}" target="_blank">SBB App</a>`;
   const marker = L.marker([s.lat,s.lng]).addTo(map).bindPopup(popup);
   markers.push(marker);
 });
@@ -331,7 +331,7 @@ stops.forEach((s, i) => {
       <a href="#" data-index="${i}" class="focus-link">定位到地图</a>
       <a href="${s.google}" target="_blank">Google Maps</a>
       <a href="${s.apple}" target="_blank">Apple 地图</a>
-      <a href="${s.sbb}" target="_blank">SBB 查询</a>
+      <a href="${s.sbb}" target="_blank">SBB App</a>
     </div>
   `;
   stopGrid.appendChild(card);
