@@ -4,108 +4,307 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>zurich</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <style>
 :root{
-  --bg:#f6f2ea;--card:#fffaf3;--ink:#26211b;--muted:#74695d;--accent:#b35a16;
-  --green:#246a28;--blue:#0a63a6;--red:#b31212;--border:#e5d8c5;--shadow:0 10px 28px rgba(80,50,15,.08)
+  --bg:#f7f1e7;
+  --card:#fffaf2;
+  --ink:#211b14;
+  --muted:#756a5d;
+  --accent:#b45b18;
+  --accent2:#0a67a3;
+  --green:#22702b;
+  --red:#b00018;
+  --border:#e7d7c2;
+  --shadow:0 10px 28px rgba(75,45,14,.08);
 }
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;color:var(--ink)}
-.wrap{max-width:1180px;margin:0 auto;padding:calc(10px + env(safe-area-inset-top)) 10px 28px}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:14px;margin-bottom:12px}.section-title{font-size:21px;margin:0 0 12px;font-weight:900;letter-spacing:.2px}.tiny{font-size:12px;color:var(--muted);line-height:1.45;margin:8px 0 0}.order-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.order-link{display:flex;gap:8px;align-items:center;text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--border);border-radius:14px;padding:10px;min-height:58px}.order-link:active{transform:scale(.99)}.badge{flex:0 0 auto;width:29px;height:29px;border-radius:50%;background:var(--accent);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}.order-link b{font-size:14px;line-height:1.25;display:block}.order-link span{font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.2}
-.map-wrap{position:relative}.map-hint{position:absolute;z-index:450;right:18px;top:18px;background:rgba(255,250,242,.94);border:1px solid var(--border);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;color:var(--muted);box-shadow:0 4px 12px rgba(0,0,0,.08)}#map{height:59vh;min-height:470px;border-radius:18px;border:1px solid var(--border);overflow:hidden;margin-bottom:12px;box-shadow:var(--shadow)}
-.rail{display:grid;grid-template-columns:1fr 1fr;gap:10px}.rail-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:12px}.rail-card h3{margin:0 0 5px;font-size:17px}.rail-card p{margin:0 0 10px;color:var(--muted);font-size:13px;line-height:1.5}.btnrow{display:flex;gap:7px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:999px;padding:9px 12px;font-size:13px;font-weight:850;border:1px solid transparent;white-space:nowrap}.btn.google{background:#eaf4ff;color:var(--blue);border-color:#cde5fb}.btn.apple{background:#edf8ed;color:var(--green);border-color:#cde8cb}.btn.sbb{background:#fff0ef;color:var(--red);border-color:#f5ceca}.btn.dark{background:#2b261f;color:#fff;border-color:#2b261f}.btn.small{font-size:12px;padding:7px 10px}.modules{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stop{background:#fff;border:1px solid var(--border);border-radius:16px;padding:14px;scroll-margin-top:12px}.stophead{display:flex;gap:10px;align-items:flex-start}.stop h2{margin:0;font-size:17px;line-height:1.25}.time{font-size:12px;color:#8a5a2a;margin-top:3px;font-weight:800}.tag{display:inline-block;border-radius:999px;background:#f1e4d4;color:#805019;padding:2px 8px;margin-right:5px;font-size:12px;font-weight:850}.txt{margin:9px 0 0;font-size:13px;line-height:1.62;color:#332d25}.muted{color:var(--muted)}.marker-label{background:var(--accent);color:white;border-radius:50%;width:30px;height:30px;line-height:30px;text-align:center;font-weight:900;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25)}.leaflet-popup-content{min-width:260px}.popup-title{font-weight:900;font-size:15px;margin-bottom:5px}.popup-meta{font-size:12px;color:#555;line-height:1.55;margin-bottom:8px}
-@media(max-width:860px){.order-grid{grid-template-columns:1fr 1fr}.rail,.modules{grid-template-columns:1fr}#map{height:55vh;min-height:390px}.section-title{font-size:19px}.card{padding:12px}}
-@media(max-width:430px){.order-grid{grid-template-columns:1fr}.btn{width:100%}.btnrow{gap:6px}.map-hint{display:none}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;
+}
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:calc(10px + env(safe-area-inset-top)) 10px 30px;
+}
+#mapBox{
+  height:58vh;
+  min-height:440px;
+  border-radius:20px;
+  border:1px solid var(--border);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  margin-bottom:12px;
+  background:#fff;
+}
+#googleMap{
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:14px;
+  margin-bottom:12px;
+}
+.section-title{
+  font-size:22px;
+  margin:0 0 12px;
+  font-weight:900;
+  letter-spacing:.2px;
+}
+.modules{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.stop{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:15px;
+  scroll-margin-top:12px;
+}
+.stop h2{
+  margin:0;
+  font-size:19px;
+  line-height:1.25;
+  font-weight:950;
+}
+.sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+}
+.time{
+  margin-top:8px;
+  display:inline-block;
+  font-size:12px;
+  color:#8b5522;
+  background:#f3e3cf;
+  border-radius:999px;
+  padding:3px 9px;
+  font-weight:900;
+}
+.txt{
+  margin:10px 0 0;
+  font-size:14px;
+  line-height:1.65;
+  color:#332a21;
+}
+.tag{
+  display:inline-block;
+  border-radius:999px;
+  background:#f0e2d1;
+  color:#7b4d18;
+  padding:2px 8px;
+  margin-right:6px;
+  font-size:12px;
+  font-weight:900;
+}
+.actions{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:nowrap;
+  gap:8px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-top:11px;
+  -webkit-overflow-scrolling:touch;
+}
+.btn{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  border-radius:999px;
+  padding:9px 13px;
+  font-size:13px;
+  font-weight:900;
+  border:1px solid transparent;
+  white-space:nowrap;
+}
+.btn.google{background:#e8f4ff;color:var(--accent2);border-color:#cae4fa}
+.btn.apple{background:#ebf7eb;color:var(--green);border-color:#cbe7c9}
+.btn.sbb{background:#fff0f1;color:var(--red);border-color:#f3cbd0}
+.btn.dark{background:#2b251e;color:#fff;border-color:#2b251e}
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:calc(18px + env(safe-area-inset-bottom));
+  transform:translateX(-50%);
+  background:#211b14;
+  color:#fff;
+  padding:10px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:800;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+  z-index:9999;
+}
+.toast.show{opacity:1}
+@media(max-width:860px){
+  .modules{grid-template-columns:1fr}
+  #mapBox{height:54vh;min-height:390px}
+  .section-title{font-size:20px}
+  .card{padding:12px}
+}
+@media(max-width:430px){
+  .stop{padding:13px}
+  .stop h2{font-size:18px}
+  #mapBox{min-height:370px}
+  .btn{font-size:12px;padding:8px 11px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="card">
-    <h1 class="section-title">今日打卡顺序</h1>
-    <div id="orderNav" class="order-grid"></div>
-  </div>
-
-  <div class="map-wrap">
-    <div class="map-hint">点击编号查看点位</div>
-    <div id="map"></div>
+  <div id="mapBox">
+    <iframe id="googleMap" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
   </div>
 
   <div class="card">
-    <h2 class="section-title">SBB 火车</h2>
-    <div class="rail">
-      <div class="rail-card">
-        <h3>Olten → Zürich HB</h3>
-        <p>建议 12:20 左右出发，到苏黎世主站后开始倒序打卡。</p>
-        <div class="btnrow">
-          <a class="btn sbb" href="sbbmobile://timetable?from=Olten&to=Z%C3%BCrich%20HB&traveldate=2026-05-14&traveltime=12%3A20&timemode=departure&appid=zurich" onclick="copyText('Olten → Zürich HB，12:20 左右出发')">打开 SBB Mobile</a>
-        </div>
-      </div>
-      <div class="rail-card">
-        <h3>Zürich HB → Zürich Flughafen</h3>
-        <p>建议 18:52 左右离开苏黎世主站，19:30 前进入机场。</p>
-        <div class="btnrow">
-          <a class="btn sbb" href="sbbmobile://timetable?from=Z%C3%BCrich%20HB&to=Z%C3%BCrich%20Flughafen&traveldate=2026-05-14&traveltime=18%3A52&timemode=departure&appid=zurich" onclick="copyText('Zürich HB → Zürich Flughafen，18:52 左右出发')">打开 SBB Mobile</a>
-        </div>
-      </div>
-    </div>
-    <p class="tiny">按钮使用 SBB Mobile App 跳转，不放网页备用链接；若手机未能自动带入站点，已同时复制查询文字，可直接粘贴到 SBB Mobile。</p>
-  </div>
-
-  <div class="card">
-    <h2 class="section-title">每个打卡点</h2>
+    <h2 class="section-title">点位详情</h2>
     <div id="modules" class="modules"></div>
   </div>
 </div>
+<div id="toast" class="toast">已复制查询信息</div>
 
 <script>
 const points = [
-  {no:9,time:'13:20–14:05', title:'苏黎世联邦理工学院主楼 + 观景大平台', short:'苏黎世联邦理工学院主楼 / 观景大平台', label:'ETH Zurich Main Building Polyterrasse', purpose:'先上到城市高点，把苏黎世联邦理工学院主楼和观景大平台一起打卡。', shoot:'拍主楼外观、观景平台栏杆边的老城俯瞰、利马特河、教堂尖顶和远处湖面。', lat:47.37648, lng:8.54808},
-  {no:8,time:'14:05–14:35', title:'苏黎世美术馆', short:'苏黎世美术馆', label:'Kunsthaus Zurich', purpose:'从联邦理工学院下山后的顺路点，适合作为建筑外观和城市文化感补充。', shoot:'拍美术馆外立面、门口街景、路牌和电车经过的城市感画面。', lat:47.37026, lng:8.54813},
-  {no:7,time:'14:35–15:25', title:'天鹅湖附近', short:'天鹅湖附近', label:'Salon Theater Herzbaracke Zurich', purpose:'去苏黎世湖边拍水面和天鹅，这是整条路线最有湖边旅行感的位置。', shoot:'拍天鹅、湖面、湖边长椅、歌剧院附近街景、远处船只和下午光线下的水面反光。', lat:47.36644, lng:8.54436},
-  {no:6,time:'15:25–15:55', title:'苏黎世大教堂', short:'苏黎世大教堂', label:'Grossmunster Zurich', purpose:'从湖边回到老城核心区，打卡苏黎世最有辨识度的双塔教堂。', shoot:'拍双塔教堂外观、桥上回望老城、利马特河两岸、教堂与河道同框。', lat:47.37005, lng:8.54408},
-  {no:5,time:'15:55–16:25', title:'圣母大教堂', short:'圣母大教堂', label:'Fraumunster Zurich', purpose:'从苏黎世大教堂过桥到圣母大教堂，完成老城两座核心教堂的对照打卡。', shoot:'拍圣母大教堂尖顶、桥面视角、河岸建筑、教堂与蓝绿色尖顶的竖构图。', lat:47.36972, lng:8.54108},
-  {no:4,time:'16:25–16:50', title:'班霍夫大街', short:'班霍夫大街', label:'Bahnhofstrasse Zurich', purpose:'从教堂区切换到商业街区，快速感受苏黎世主街氛围。', shoot:'拍街道纵深、橱窗、瑞士城市电车、路牌和整齐的商业街画面。', lat:47.37165, lng:8.53856},
-  {no:3,time:'16:50–17:20', title:'奥古斯丁巷', short:'奥古斯丁巷', label:'Augustinergasse Zurich', purpose:'专门来拍苏黎世老城最经典的彩色窗户和窄巷氛围。', shoot:'拍彩色凸窗、老城石板路、窄巷纵深、街角招牌和人物走在巷子里的画面。', lat:47.37137, lng:8.54010},
-  {no:2,time:'17:20–18:00', title:'林登霍夫山丘', short:'林登霍夫山丘', label:'Lindenhof Zurich', purpose:'最后一个老城高点，适合在离开前俯拍苏黎世经典视角。', shoot:'拍利马特河俯瞰、老城屋顶、苏黎世大教堂双塔、河对岸建筑和城市全景。', lat:47.37310, lng:8.54055},
-  {no:1,time:'18:00–18:35', title:'苏黎世火车站', short:'苏黎世火车站', label:'Zurich HB', purpose:'回到苏黎世主站，预留买水、上厕所、找站台和处理行李的时间。', shoot:'拍火车站外观、站内大钟、站台信息屏；随后坐车去苏黎世机场。', lat:47.37818, lng:8.54019}
+  {
+    id:'olten', type:'rail', title:'奥尔滕出发', en:'Olten → Zürich HB', time:'建议 12:20 左右',
+    purpose:'从奥尔滕坐火车到苏黎世主站，抵达后开始市区倒序打卡。',
+    shoot:'这里不是拍照点，重点是用 SBB Mobile 查询实时站台、延误和换乘信息。',
+    sbb:'sbbmobile://timetable?from=Olten&to=Z%C3%BCrich%20HB&traveldate=2026-05-14&traveltime=12%3A20&timemode=departure&appid=zurich',
+    copy:'Olten → Zürich HB，建议 12:20 左右出发'
+  },
+  {
+    id:'eth-main', type:'city', title:'联邦理工学院主楼', en:'ETH Hauptgebäude', time:'13:20–13:35',
+    purpose:'先到苏黎世高处的 ETH 主楼，作为整条路线的第一个城市高点。',
+    shoot:'拍主楼外观、台阶、校园建筑线条，以及从主楼区域望向老城的开阔感。',
+    lat:47.37639, lng:8.54762, query:'ETH Hauptgebäude Zürich'
+  },
+  {
+    id:'polyterrasse', type:'city', title:'联邦理工观景大平台', en:'Polyterrasse', time:'13:35–14:05',
+    purpose:'在观景平台看苏黎世全景，是这条路线最重要的俯拍点之一。',
+    shoot:'拍利马特河、苏黎世老城、教堂尖顶、湖面方向和人站在栏杆边的城市背景照。',
+    lat:47.37687, lng:8.54786, query:'Polyterrasse Zürich'
+  },
+  {
+    id:'kunsthaus', type:'city', title:'苏黎世美术馆', en:'Kunsthaus Zürich', time:'14:05–14:35',
+    purpose:'从 ETH 下山后的顺路建筑点，用来补充苏黎世的城市文化感。',
+    shoot:'拍美术馆外立面、门口街景、电车经过、路牌和干净的城市建筑画面。',
+    lat:47.37026, lng:8.54813, query:'Kunsthaus Zürich'
+  },
+  {
+    id:'lake', type:'city', title:'天鹅湖附近', en:'Salon Theater Herzbaracke', time:'14:35–15:25',
+    purpose:'到湖边拍水面和天鹅，是整条路线最有旅行氛围的位置。',
+    shoot:'拍天鹅、湖面反光、湖边长椅、船只、歌剧院附近街景和人物湖景照。',
+    lat:47.36644, lng:8.54436, query:'Salon Theater Herzbaracke Zürich'
+  },
+  {
+    id:'grossmunster', type:'city', title:'苏黎世大教堂', en:'Grossmünster', time:'15:25–15:55',
+    purpose:'回到老城核心，打卡苏黎世最有辨识度的双塔教堂。',
+    shoot:'拍双塔教堂外观、桥上回望教堂、利马特河两岸和教堂与河道同框。',
+    lat:47.37005, lng:8.54408, query:'Grossmünster Zürich'
+  },
+  {
+    id:'fraumunster', type:'city', title:'圣母大教堂', en:'Fraumünster', time:'15:55–16:25',
+    purpose:'从苏黎世大教堂过桥到圣母大教堂，完成老城两座核心教堂的对照打卡。',
+    shoot:'拍尖顶、桥面视角、河岸建筑、蓝绿色屋顶和老城街巷转角。',
+    lat:47.36972, lng:8.54108, query:'Fraumünster Zürich'
+  },
+  {
+    id:'bahnhofstrasse', type:'city', title:'班霍夫大街', en:'Bahnhofstrasse', time:'16:25–16:50',
+    purpose:'从教堂区切换到苏黎世商业主街，快速感受市中心街道氛围。',
+    shoot:'拍街道纵深、橱窗、电车、路牌、行人和整齐的商业街画面。',
+    lat:47.37165, lng:8.53856, query:'Bahnhofstrasse Zürich'
+  },
+  {
+    id:'augustinergasse', type:'city', title:'奥古斯丁巷', en:'Augustinergasse', time:'16:50–17:20',
+    purpose:'专门拍苏黎世老城最经典的彩色凸窗和窄巷氛围。',
+    shoot:'拍彩色窗户、石板路、窄巷纵深、街角招牌和人走在老城小巷里的画面。',
+    lat:47.37137, lng:8.54010, query:'Augustinergasse Zürich'
+  },
+  {
+    id:'lindenhof', type:'city', title:'林登霍夫山丘', en:'Lindenhof', time:'17:20–18:00',
+    purpose:'最后一个老城高点，适合离开前再拍一次苏黎世经典俯瞰。',
+    shoot:'拍利马特河俯瞰、老城屋顶、苏黎世大教堂双塔、河对岸建筑和全景照。',
+    lat:47.37310, lng:8.54055, query:'Lindenhof Zürich'
+  },
+  {
+    id:'zurich-hb', type:'station', title:'苏黎世火车站', en:'Zürich HB', time:'18:00–18:35',
+    purpose:'回到苏黎世主站，预留买水、上厕所、找站台和处理行李的时间。',
+    shoot:'拍车站外观、站内大钟、站台信息屏；随后坐车去苏黎世机场。',
+    lat:47.37818, lng:8.54019, query:'Zürich HB',
+    sbb:'sbbmobile://timetable?from=Z%C3%BCrich%20HB&to=Z%C3%BCrich%20Flughafen&traveldate=2026-05-14&traveltime=18%3A52&timemode=departure&appid=zurich',
+    copy:'Zürich HB → Zürich Flughafen，建议 18:52 左右出发'
+  },
+  {
+    id:'airport', type:'airport', title:'苏黎世机场', en:'Zürich Flughafen', time:'19:05–19:30 抵达并进入机场',
+    purpose:'最终到达机场，目标是在舱门 21:00 关闭前约 1.5 小时进入机场。',
+    shoot:'拍机场站到达、航站楼入口、出发大厅屏幕；之后优先办理安检和登机。',
+    lat:47.45822, lng:8.55548, query:'Zürich Flughafen',
+    sbb:'sbbmobile://timetable?from=Z%C3%BCrich%20HB&to=Z%C3%BCrich%20Flughafen&traveldate=2026-05-14&traveltime=18%3A52&timemode=departure&appid=zurich',
+    copy:'Zürich HB → Zürich Flughafen，建议 18:52 左右出发'
+  }
 ];
+
 function enc(x){return encodeURIComponent(x)}
 function googleApp(p){return `comgooglemaps://?q=${p.lat},${p.lng}&center=${p.lat},${p.lng}&zoom=16`}
 function appleApp(p){return `maps://?q=${enc(p.title)}&ll=${p.lat},${p.lng}`}
-function copyText(text){try{navigator.clipboard.writeText(text)}catch(e){}}
+function googleEmbedPoint(p){return `https://maps.google.com/maps?q=${enc(p.query || p.title)}&ll=${p.lat},${p.lng}&z=16&output=embed`}
+function googleEmbedRoute(){
+  const route = points.filter(p=>p.lat && p.lng).map(p=>p.query || p.title);
+  const start = route.shift();
+  return `https://maps.google.com/maps?f=d&source=s_d&saddr=${enc(start)}&daddr=${route.map(enc).join('+to:')}&dirflg=w&output=embed`;
+}
+function showToast(){const t=document.getElementById('toast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1400)}
+function copyText(text){try{navigator.clipboard.writeText(text).then(showToast).catch(showToast)}catch(e){showToast()}}
+function focusPoint(id){
+  const p=points.find(x=>x.id===id);
+  if(!p || !p.lat)return;
+  document.getElementById('googleMap').src=googleEmbedPoint(p);
+  document.getElementById('mapBox').scrollIntoView({behavior:'smooth', block:'start'});
+}
 
-const nav=document.getElementById('orderNav');
-points.forEach(p=>{
-  const a=document.createElement('a');
-  a.className='order-link';
-  a.href=`#stop-${p.no}`;
-  a.innerHTML=`<span class="badge">${p.no}</span><div><b>${p.short}</b><span>${p.time}</span></div>`;
-  a.addEventListener('click',()=>{setTimeout(()=>focusPoint(p.no),120)});
-  nav.appendChild(a);
-});
-
-const map = L.map('map',{scrollWheelZoom:true}).setView([47.3719,8.5438],15);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
-const latlngs = points.map(p => [p.lat,p.lng]);
-L.polyline(latlngs,{weight:5,opacity:.78,color:'#b35a16'}).addTo(map);
-map.fitBounds(L.latLngBounds(latlngs),{padding:[32,32]});
-let markers = {};
-points.forEach(p=>{
-  const icon = L.divIcon({className:'', html:`<div class="marker-label">${p.no}</div>`, iconSize:[30,30], iconAnchor:[15,15]});
-  const html = `<div><div class="popup-title">${p.no}. ${p.title}</div><div class="popup-meta"><b>${p.time}</b><br><b>去干嘛：</b>${p.purpose}<br><b>拍什么：</b>${p.shoot}</div><div class="btnrow"><a class="btn small google" href="${googleApp(p)}">Google 地图</a><a class="btn small apple" href="${appleApp(p)}">Apple 地图</a></div></div>`;
-  markers[p.no] = L.marker([p.lat,p.lng],{icon}).addTo(map).bindPopup(html);
-});
+document.getElementById('googleMap').src=googleEmbedRoute();
 
 const modules=document.getElementById('modules');
 points.forEach(p=>{
   const div=document.createElement('section');
   div.className='stop';
-  div.id=`stop-${p.no}`;
-  div.innerHTML=`<div class="stophead"><span class="badge">${p.no}</span><div><h2>${p.title}</h2><div class="time">${p.time}</div></div></div><p class="txt"><span class="tag">去干嘛</span>${p.purpose}</p><p class="txt muted"><span class="tag">拍什么</span>${p.shoot}</p><div class="btnrow" style="margin-top:10px"><a class="btn google" href="${googleApp(p)}">Google 地图</a><a class="btn apple" href="${appleApp(p)}">Apple 地图</a><a class="btn dark" href="#map" onclick="focusPoint(${p.no})">地图定位</a></div>`;
+  div.id=`module-${p.id}`;
+  const links=[];
+  if(p.lat){
+    links.push(`<a class="btn google" href="${googleApp(p)}">Google 地图</a>`);
+    links.push(`<a class="btn apple" href="${appleApp(p)}">Apple 地图</a>`);
+    links.push(`<button class="btn dark" type="button" onclick="focusPoint('${p.id}')">地图定位</button>`);
+  }
+  if(p.sbb){
+    links.push(`<a class="btn sbb" href="${p.sbb}" onclick="copyText('${p.copy}')">SBB Mobile</a>`);
+  }
+  div.innerHTML=`
+    <h2>${p.title}</h2>
+    <div class="sub">${p.en}</div>
+    <div class="time">${p.time}</div>
+    <p class="txt"><span class="tag">去干嘛</span>${p.purpose}</p>
+    <p class="txt"><span class="tag">拍什么</span>${p.shoot}</p>
+    <div class="actions">${links.join('')}</div>`;
   modules.appendChild(div);
 });
-function focusPoint(no){const p=points.find(x=>x.no===no); if(!p)return; map.setView([p.lat,p.lng],17); markers[no].openPopup();}
 </script>
 </body>
 </html>
