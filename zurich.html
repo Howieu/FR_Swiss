@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>苏黎世倒序打卡交互式地图｜9 → 1</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQBMkKfBI9uKAtZaLS9pizL0uzwM+cc=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+  :root{--bg:#f6f2ea;--card:#fffaf2;--ink:#2b261f;--muted:#74695d;--accent:#b35a16;--accent2:#6f8f38;--border:#e5d8c5;--white:#fff;}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;color:var(--ink)}
+  .wrap{max-width:1240px;margin:0 auto;padding:18px 14px 28px}.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin-bottom:14px}.panel{background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:0 10px 28px rgba(80,50,15,.08);padding:16px}h1{margin:0 0 8px;font-size:25px;line-height:1.25}.subtitle{margin:0;color:var(--muted);font-size:14px;line-height:1.65}.hard{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.chip{border:1px solid var(--border);border-radius:14px;background:#fff;padding:10px}.chip b{display:block;font-size:13px}.chip span{font-size:12px;color:var(--muted);line-height:1.35}
+  #map{height:76vh;min-height:600px;border-radius:18px;border:1px solid var(--border);overflow:hidden}.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:999px;padding:9px 12px;font-size:13px;font-weight:750;border:1px solid transparent;white-space:nowrap}.btn.g{background:#eaf4ff;color:#0a63a6;border-color:#cde5fb}.btn.a{background:#edf8ed;color:#276c25;border-color:#cde8cb}.btn.s{background:#fff0ef;color:#b31212;border-color:#f5ceca}.btn.small{font-size:12px;padding:7px 10px}.grid{display:grid;grid-template-columns:440px 1fr;gap:14px}.timeline{display:flex;flex-direction:column;gap:12px}.stop{background:#fff;border:1px solid var(--border);border-radius:16px;padding:13px;cursor:pointer;transition:.15s}.stop:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(80,50,15,.08)}.stop.active{outline:3px solid rgba(179,90,22,.18);border-color:#d08a54}.stophead{display:flex;gap:10px;align-items:flex-start}.num{flex:0 0 auto;width:35px;height:35px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-weight:900}.stop h3{margin:0;font-size:16px;line-height:1.3}.stop .time{font-size:12px;color:#8a5a2a;margin-top:2px;font-weight:700}.purpose{margin:9px 0 0;font-size:13px;line-height:1.55;color:#332d25}.shoot{margin:6px 0 9px;font-size:13px;line-height:1.55;color:var(--muted)}.tag{display:inline-block;border-radius:999px;background:#f1e4d4;color:#805019;padding:2px 8px;margin-right:4px;font-size:12px;font-weight:750}.actions{display:flex;gap:6px;flex-wrap:wrap}.legend{font-size:13px;color:var(--muted);line-height:1.6}.leaflet-popup-content{min-width:286px}.popup-title{font-weight:850;font-size:15px;margin-bottom:4px}.popup-meta{font-size:12px;color:#666;margin-bottom:8px;line-height:1.55}.popup-actions{display:flex;gap:6px;flex-wrap:wrap}.marker-label{background:#b35a16;color:white;border-radius:50%;width:28px;height:28px;line-height:28px;text-align:center;font-weight:900;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+  @media(max-width:940px){.hero,.grid{grid-template-columns:1fr}.hard,.quick{grid-template-columns:1fr}#map{height:58vh;min-height:420px}.timeline{max-height:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="panel">
+      <h1>苏黎世倒序打卡地图：9 → 1</h1>
+      <p class="subtitle">从 Olten 到 Zürich HB 后，按图片倒序走：ETH / Polyterrasse → Kunsthaus → 天鹅湖附近 → Grossmünster → Fraumünster → Bahnhofstrasse → Augustinergasse → Lindenhof → Zürich HB。每个点位单独列出，并写明“去干嘛”和“拍什么”。</p>
+      <div class="hard">
+        <div class="chip"><b>Olten 出发</b><span>建议 12:20 左右火车到 Zürich HB</span></div>
+        <div class="chip"><b>去机场</b><span>建议 18:52 左右 Zürich HB → Zürich Flughafen</span></div>
+        <div class="chip"><b>机场时间</b><span>21:00 舱门关闭；19:30 前进入机场</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h1 style="font-size:20px">火车快捷按钮</h1>
+      <p class="legend">SBB 按钮打开官方行程页；站台、延误、临时改线以 SBB Mobile 实时显示为准。</p>
+      <div class="quick">
+        <a class="btn s" target="_blank" href="https://www.sbb.ch/en?date=%222026-05-14%22&time=%2212:00%22&moment=%22DEPARTURE%22&von=Olten&nach=Z%C3%BCrich%20HB">SBB：Olten → Zürich HB</a>
+        <a class="btn s" target="_blank" href="https://www.sbb.ch/en?date=%222026-05-14%22&time=%2218:45%22&moment=%22DEPARTURE%22&von=Z%C3%BCrich%20HB&nach=Z%C3%BCrich%20Flughafen">SBB：HB → Airport</a>
+        <a class="btn g" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=Z%C3%BCrich%20HB&destination=Z%C3%BCrich%20Flughafen&travelmode=transit">Google：HB → Airport</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h1 style="font-size:20px;margin-bottom:12px">每个打卡点</h1>
+      <div id="timeline" class="timeline"></div>
+    </div>
+    <div id="map"></div>
+  </div>
+</div>
+<script>
+const travelDate = '2026-05-14';
+const points = [
+  {no:9,time:'13:20–14:05', title:'ETH 主楼 + Polyterrasse 观景平台', label:'ETH Zurich Main Building / Polyterrasse', purpose:'先上到苏黎世城市高点，把 ETH 主楼和 Polyterrasse 观景平台一起打卡；这是整条路线最适合先建立城市全景感的位置。', shoot:'拍 ETH 主楼正面、Polyterrasse 平台栏杆边的老城俯瞰、利马特河、教堂尖顶和远处湖面。', lat:47.37648, lng:8.54808, from:'Zürich HB', to:'ETH Hauptgebäude Zürich', sbbTime:'13:15'},
+  {no:8,time:'14:05–14:35', title:'苏黎世美术馆 Kunsthaus Zürich', label:'Kunsthaus Zürich', purpose:'从 ETH 下山后的顺路点，适合作为建筑外观和城市文化感补充；不建议进馆，避免压缩后面湖边和机场时间。', shoot:'拍美术馆外立面、门口街景、路牌和电车经过的城市感画面。', lat:47.37026, lng:8.54813, from:'ETH Hauptgebäude Zürich', to:'Kunsthaus Zürich', sbbTime:'14:05'},
+  {no:7,time:'14:35–15:25', title:'天鹅湖附近 / Salon Theater Herzbaracke', label:'Salon Theater Herzbaracke / Bellevue', purpose:'去苏黎世湖边拍水面和天鹅，这一段是整条路线最有“湖边旅行感”的位置；可以稍微多停留。', shoot:'拍天鹅、湖面、湖边长椅、歌剧院附近街景、远处船只和下午光线下的水面反光。', lat:47.36644, lng:8.54436, from:'Kunsthaus Zürich', to:'Salon Theater Herzbaracke Zürich', sbbTime:'14:35'},
+  {no:6,time:'15:25–15:55', title:'苏黎世大教堂 Grossmünster', label:'Grossmünster Zürich', purpose:'从湖边回到老城核心区，打卡苏黎世最有辨识度的双塔教堂；这里也是过桥拍河景的关键点。', shoot:'拍双塔教堂外观、桥上回望老城、利马特河两岸、教堂与河道同框。', lat:47.37005, lng:8.54408, from:'Bellevue Zürich', to:'Grossmünster Zürich', sbbTime:'15:25'},
+  {no:5,time:'15:55–16:25', title:'圣母大教堂 Fraumünster', label:'Fraumünster Zürich', purpose:'从 Grossmünster 过桥到 Fraumünster，完成苏黎世老城两座核心教堂的对照打卡。', shoot:'拍 Fraumünster 尖顶、桥面视角、河岸建筑、教堂与蓝绿色尖顶的竖构图。', lat:47.36972, lng:8.54108, from:'Grossmünster Zürich', to:'Fraumünster Zürich', sbbTime:'15:55'},
+  {no:4,time:'16:25–16:50', title:'班霍夫大街 Bahnhofstrasse', label:'Bahnhofstrasse Zürich', purpose:'从教堂区切换到商业街区，快速感受苏黎世主街氛围；这里不必久留，作为去 Augustinergasse 的过渡最合适。', shoot:'拍街道纵深、橱窗、瑞士城市电车、路牌和干净整齐的商业街画面。', lat:47.37165, lng:8.53856, from:'Fraumünster Zürich', to:'Bahnhofstrasse Zürich', sbbTime:'16:25'},
+  {no:3,time:'16:50–17:20', title:'奥古斯丁巷 Augustinergasse', label:'Augustinergasse Zürich', purpose:'专门来拍苏黎世老城最经典的彩色窗户和窄巷氛围，是你这条路线里最适合拍人像/街巷细节的点。', shoot:'拍彩色凸窗、老城石板路、窄巷纵深、街角招牌和人物走在巷子里的画面。', lat:47.37137, lng:8.54010, from:'Bahnhofstrasse Zürich', to:'Augustinergasse Zürich', sbbTime:'16:50'},
+  {no:2,time:'17:20–18:00', title:'林登霍夫山丘 Lindenhof', label:'Lindenhof Zürich', purpose:'最后一个老城高点，适合在离开前俯拍苏黎世经典视角；这里也适合短暂休息、整理照片和确认去机场火车。', shoot:'拍利马特河俯瞰、老城屋顶、Grossmünster 双塔、河对岸建筑和夕方前的城市全景。', lat:47.37310, lng:8.54055, from:'Augustinergasse Zürich', to:'Lindenhof Zürich', sbbTime:'17:20'},
+  {no:1,time:'18:00–18:35', title:'苏黎世火车站 Zürich HB', label:'Zürich HB', purpose:'回到 Zürich HB，预留买水、上厕所、找站台和处理行李的时间；这里是去机场前的收尾点。', shoot:'拍 Zürich HB 外观、站内大钟、站台信息屏；随后建议 18:52 左右上车去 Zürich Flughafen。', lat:47.37818, lng:8.54019, from:'Lindenhof Zürich', to:'Zürich HB', sbbTime:'18:00'}
+];
+function enc(x){return encodeURIComponent(x)}
+function googleLink(p){return `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`}
+function appleLink(p){return `https://maps.apple.com/?q=${enc(p.label)}&ll=${p.lat},${p.lng}`}
+function sbbLink(p){return `https://www.sbb.ch/en?date=%22${travelDate}%22&time=%22${p.sbbTime}%22&moment=%22DEPARTURE%22&von=${enc(p.from)}&nach=${enc(p.to)}`}
+
+const map = L.map('map',{scrollWheelZoom:true}).setView([47.3719,8.5438],15);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+const latlngs = points.map(p => [p.lat,p.lng]);
+L.polyline(latlngs,{weight:5,opacity:.75}).addTo(map);
+map.fitBounds(L.latLngBounds(latlngs),{padding:[35,35]});
+let markers = {};
+points.forEach(p=>{
+  const icon = L.divIcon({className:'', html:`<div class="marker-label">${p.no}</div>`, iconSize:[28,28], iconAnchor:[14,14]});
+  const html = `<div><div class="popup-title">${p.no}. ${p.title}</div><div class="popup-meta"><b>${p.time}</b><br><b>去干嘛：</b>${p.purpose}<br><b>拍什么：</b>${p.shoot}</div><div class="popup-actions"><a class="btn small g" target="_blank" href="${googleLink(p)}">Google Map</a><a class="btn small a" target="_blank" href="${appleLink(p)}">Apple Map</a><a class="btn small s" target="_blank" href="${sbbLink(p)}">SBB Mobile</a></div></div>`;
+  markers[p.no] = L.marker([p.lat,p.lng],{icon}).addTo(map).bindPopup(html);
+});
+L.polyline([[47.37818,8.54019],[47.4506,8.5624]],{weight:4,dashArray:'8,8',opacity:.55}).addTo(map);
+
+const timeline = document.getElementById('timeline');
+points.forEach(p=>{
+  const el=document.createElement('div'); el.className='stop'; el.dataset.no=p.no;
+  el.innerHTML=`<div class="stophead"><span class="num">${p.no}</span><div><h3>${p.title}</h3><div class="time">${p.time}</div></div></div><p class="purpose"><span class="tag">去干嘛</span>${p.purpose}</p><p class="shoot"><span class="tag">拍什么</span>${p.shoot}</p><div class="actions"><a class="btn small g" target="_blank" href="${googleLink(p)}">Google Map</a><a class="btn small a" target="_blank" href="${appleLink(p)}">Apple Map</a><a class="btn small s" target="_blank" href="${sbbLink(p)}">SBB Mobile</a></div>`;
+  el.addEventListener('click', (e)=>{ if(e.target.tagName==='A') return; document.querySelectorAll('.stop').forEach(x=>x.classList.remove('active')); el.classList.add('active'); map.setView([p.lat,p.lng],17); markers[p.no].openPopup(); });
+  timeline.appendChild(el);
+});
+</script>
+</body>
+</html>
